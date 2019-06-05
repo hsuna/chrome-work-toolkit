@@ -1,0 +1,7 @@
+*.rar
+
+node_modules
+js
+dist
+build
+scripts
