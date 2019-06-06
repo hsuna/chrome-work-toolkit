@@ -3,28 +3,87 @@
         <div class="popup">
             <div class="popup-nav">
                 <ul>
-                    <li>URL编码/解码</li>
-                    <li>海外加/解密</li>
+                    <li :class="{active: navIndex==index}" v-for="(item,index) in nav" :key="index" @click="handlerNavClick(index)">{{item.label}}</li>
                 </ul>
             </div>
             <div class="popup-content">
-                <div class="popup-box">
-                    密文：
-                    <textarea></textarea>
-                </div>
-                <div class="popup-box">
-                    明文：
-                    <textarea></textarea>
-                </div>
+                <component :is="navComponent"></component>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import encodeURI from './components/encodeURI'
+
 export default {
+    data(){
+        return {
+            navIndex: -1,
+            navComponent: null,
+            nav: [
+                { label: 'URI编/解码', component:'encodeURI' },
+                { label: '海外加/解密', component:'' }
+            ]
+        }
+    },
+    created(){
+        this.handlerNavClick(0)
+    },
+    methods: {
+        handlerNavClick(index){
+            this.navIndex = index;
+            this.navComponent = this.nav[index].component
+        }
+    },
+    components: {
+        encodeURI
+    },
 }
 </script>
 
 <style lang="less">
+.popup{
+    width: 400px;
+    height: 500px;
+    .popup-nav {
+        position: relative;
+        padding: 10px 10px 0;
+        border-bottom: 1px solid #dadada;
+        text-align: left;
+        font-size: 14px;
+        user-select: none;
+
+        ul{
+            white-space: nowrap;
+
+            li{
+                display: inline-block;
+                padding: 4px 10px ;
+                margin-left: -1px;
+                border: 1px solid #409eff;
+                border-bottom-width: 0;
+                border-radius: 4px 4px 0 0;
+                background-color: transparent;
+                color: #409eff;
+
+                &:hover,
+                &.active{
+                    color: #fff;
+                    border-color: #409eff;
+                    background-color: #409eff;
+                }
+            }
+        }
+    }
+
+    .popup-body {
+        position: relative;
+        overflow-y: auto;
+        width: 420px;
+        height: 340px;
+        padding: 15px;
+        font-size: 14px;
+    }
+}
 </style>

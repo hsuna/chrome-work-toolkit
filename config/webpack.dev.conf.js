@@ -28,7 +28,12 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: ['css-loader', 'postcss-loader', 'less-loader', 'vue-style-loader'],
+          loaders: {
+            css: ['vue-style-loader', 'css-loader'],
+            postcss: ['vue-style-loader', 'css-loader'],
+            less: ['vue-style-loader', 'css-loader', 'less-loader'],
+          },
+          cacheBusting: true,
           transformToRequire: {
             video: ['src', 'poster'],
             source: 'src',
@@ -38,8 +43,12 @@ module.exports = {
         }
       },
       {
+        test: /\.css$/,
+        use: ['vue-style-loader', 'css-loader'],
+      },
+      {
         test: /\.less$/,
-        use: ['css-loader', 'postcss-loader', 'less-loader', 'vue-style-loader'],
+        use: ['vue-style-loader', 'css-loader', 'less-loader'],
       },
     ]
   },

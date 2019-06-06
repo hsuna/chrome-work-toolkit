@@ -7,8 +7,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack --watch --config config/webpack.dev.conf.js",
-    "build": "set NODE_ENV=production && webpack --config config/webpack.prod.conf.js",
-    "create": "webpack --config config/webpack.create.conf.js"
+    "build": "set NODE_ENV=production && webpack --config config/webpack.prod.conf.js"
   },
   "repository": {
     "type": "git",
@@ -23,8 +22,12 @@
     "babel-preset-stage-2": "^6.22.0",
     "clean-webpack-plugin": "^2.0.1",
     "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
+    "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",
