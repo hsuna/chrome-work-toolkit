@@ -185,7 +185,7 @@ export default {
 
         .control-textarea{
             width: 100%;
-            height: 80px;
+            height: 120px;
         }
     }
 }

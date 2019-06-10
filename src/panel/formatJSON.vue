@@ -49,7 +49,7 @@ export default {
     }
 
     .control-textarea{
-        height: 160px;
+        height: 200px;
     }
     
     label{
