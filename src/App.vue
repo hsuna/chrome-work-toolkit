@@ -14,7 +14,10 @@
 </template>
 
 <script>
-import encodeURI from './components/encodeURI'
+import encodeURI from './panel/encodeURI'
+import encodeHW from './panel/encodeHW'
+import encodeGLB from './panel/encodeGLB'
+import formatJSON from './panel/formatJSON'
 
 export default {
     data(){
@@ -23,7 +26,9 @@ export default {
             navComponent: null,
             nav: [
                 { label: 'URI编/解码', component:'encodeURI' },
-                { label: '海外加/解密', component:'' }
+                { label: 'HW解密', component:'encodeHW' },
+                { label: 'GLB解密', component:'encodeGLB' },
+                { label: '格式化JSON', component:'formatJSON' }
             ]
         }
     },
@@ -37,7 +42,10 @@ export default {
         }
     },
     components: {
-        encodeURI
+        encodeURI,
+        encodeHW,
+        encodeGLB,
+        formatJSON
     },
 }
 </script>
