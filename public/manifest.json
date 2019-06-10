@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "脚本自动运行工具",
+  "name": "日常工具库",
   "version": "1.0.0",
   "author": "hsuna",
-  "description": "脚本自动运行工具",
+  "description": "日常工具库",
   "icons": {
     "16": "images/icon16.png",
     "48": "images/icon48.png",
@@ -15,7 +15,7 @@
       "19": "images/icon19.png",
       "38": "images/icon38.png"
     },
-    "default_title": "脚本自动运行工具",
+    "default_title": "日常工具库",
     "default_popup": "popup.html"
   },
   "background": {
