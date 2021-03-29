@@ -17,7 +17,7 @@
 import encodeURI from './panel/encodeURI'
 import encodeBase64 from './panel/encodeBase64'
 import encodeHW from './panel/encodeHW'
-import encodeGLB from './panel/encodeGLB'
+import encodeSDK from './panel/encodeSDK'
 import formatJSON from './panel/formatJSON'
 
 export default {
@@ -29,7 +29,7 @@ export default {
                 { label: 'URI编/解码', component:'encodeURI' },
                 { label: 'Base64编/解码', component:'encodeBase64' },
                 { label: 'HW解密', component:'encodeHW' },
-                { label: 'GLB解密', component:'encodeGLB' },
+                { label: 'SDK解密', component:'encodeSDK' },
                 { label: '格式化JSON', component:'formatJSON' }
             ]
         }
@@ -47,7 +47,7 @@ export default {
         encodeURI,
         encodeBase64,
         encodeHW,
-        encodeGLB,
+        encodeSDK,
         formatJSON
     },
 }

@@ -1,5 +1,23 @@
 <template>
-    <div class="encode-glb">
+    <div class="encode-Sdk">
+        <div class="box">
+            <h4 class="box-header">SDK</h4>
+            <div class="form-group">
+                <label class="control-label">密钥：</label>
+                <c-input v-model="encodeSdkKey" @input="handlerSdkCreate"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">密文：</label>
+                <c-input v-model="encodeSdkTxt" @input="handlerSdkEncode"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">encmask：</label>
+                <c-input v-model="encodeSdkEncmask" @input="handlerSdkEncode"/>
+            </div>
+            <div class="form-group">
+                <c-textarea v-model="decodeSdkTxt" />
+            </div>
+        </div>
         <div class="box">
             <h4 class="box-header">AES</h4>
             <div class="form-group">
@@ -30,26 +48,6 @@
                 <c-textarea v-model="decodeRsaTxt" />
             </div>
         </div>
-        <div class="box">
-            <h4 class="box-header">GLB</h4>
-            <div class="form-group">
-                <label class="control-label">密钥：</label>
-                <c-input v-model="encodeGlbKey" @input="handlerGlbCreate"/>
-            </div>
-            <div class="form-group">
-                <label class="control-label">rd/content：</label>
-                <c-input v-model="encodeGlbTxt" @input="handlerGlbEncode"/>
-            </div>
-            <div class="form-group">
-                <label class="control-label">encmask：</label>
-                <c-input v-model="encodeGlbEncmask" @input="handlerGlbEncode"/>
-                <label class="control-label"><input name="glb-type" type="radio" v-model="encodeGlbType" value="1" @change="handlerGlbEncode"/>公钥</label>
-                <label class="control-label"><input name="glb-type" type="radio" v-model="encodeGlbType" value="2" @change="handlerGlbEncode"/>私钥</label>
-            </div>
-            <div class="form-group">
-                <c-textarea v-model="decodeGlbTxt" />
-            </div>
-        </div>
     </div>
 </template>
 
@@ -62,13 +60,13 @@ import CInput from '@/components/CInput';
 import CTextarea from '@/components/CTextarea';
 
 const RSA_TMP_KEY = 'RSA_TMP_KEY'
-const GLB_TMP_KEY = 'GLB_TMP_KEY'
+const Sdk_TMP_KEY = 'Sdk_TMP_KEY'
 
 export default {
     data(){
         return {
             rsa: null,
-            glb: null,
+            Sdk: null,
 
             encodeAesTxt: '',
             encodeAesKey: '',
@@ -79,16 +77,15 @@ export default {
             encodeRsaType: 1,
             decodeRsaTxt: '',
             
-            encodeGlbTxt: '',
-            encodeGlbEncmask: '',
-            encodeGlbKey: window.localStorage.getItem(GLB_TMP_KEY) || '',
-            encodeGlbType: 1,
-            decodeGlbTxt: '',
+            encodeSdkTxt: '',
+            encodeSdkEncmask: 'd,ts',
+            encodeSdkKey: window.localStorage.getItem(Sdk_TMP_KEY) || '',
+            decodeSdkTxt: '',
         }
     },
     created(){
         if(this.encodeRsaKey) this.rsa = new RSA(this.encodeRsaKey);
-        if(this.encodeGlbKey) this.glb = new RSA(this.encodeGlbKey);
+        if(this.encodeSdkKey) this.sdk = new RSA(this.encodeSdkKey);
     },
     methods: {
         handlerAesEncode(){
@@ -114,29 +111,22 @@ export default {
                 }
             }
         },
-        handlerGlbCreate(evt){
-            this.glb = new RSA(evt.target.value)
-            window.localStorage.setItem(GLB_TMP_KEY, evt.target.value)
+        handlerSdkCreate(evt){
+            this.sdk = new RSA(evt.target.value)
+            window.localStorage.setItem(Sdk_TMP_KEY, evt.target.value)
         },
-        handlerGlbEncode(){
-            if(this.encodeGlbTxt && this.encodeGlbKey){
+        handlerSdkEncode(){
+            if(this.encodeSdkTxt && this.encodeSdkKey){
                 try{
-                    let data = {};
-                    if(/"encmask" ?:/.test(this.encodeGlbTxt)){
-                        data = JSON.parse(this.encodeGlbTxt)
-                    }else if(/encmask=/.test(this.encodeGlbTxt)){
-                        data = FN.query(this.encodeGlbTxt)
-                    }else if(this.encodeGlbEncmask){
-                        data.encmask = decodeURIComponent(this.encodeGlbEncmask);
-                        data.rd = data.content= decodeURIComponent(this.encodeGlbTxt);
+                    let data={};
+                    let [d, ts] = this.encodeSdkEncmask.split(',')
+                    if(new RegExp(`\{[^{]*("${ts}" ?:)[^}]*\}`).test(this.encodeSdkTxt)){
+                        data = JSON.parse(new RegExp(`\{[^{]*("${ts}" ?:)[^}]*\}`).exec(this.encodeSdkTxt)[0])
                     }
-                    if((data.rd || data.content) && data.encmask){
-                        const RES_KEY = this.glb.decrypt(data.encmask, 1==this.encodeGlbType ? RSA.PUBLIC : RSA.PRIAVET)
-                        const json = aes.decrypt(data.rd || data.content, RES_KEY)
-                        this.decodeGlbTxt = JSON.stringify(JSON.parse(json), null, "\t");
-                    }
+                    const RES_KEY = this.sdk.decrypt(data[ts]);
+                    this.decodeSdkTxt = JSON.stringify(JSON.parse(aes.decrypt(data[d], RES_KEY)), null, "\t");
                 }catch(e){
-                    this.decodeGlbTxt = e.message;
+                     this.decodeSdkTxt = e.message;
                 }
             }
         }
@@ -149,7 +139,7 @@ export default {
 </script>
 
 <style lang="less">
-.encode-glb{
+.encode-Sdk{
     box-sizing: border-box;
 
     .box{

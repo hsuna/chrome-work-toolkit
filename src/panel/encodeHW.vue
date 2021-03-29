@@ -42,8 +42,8 @@ export default {
             if(this.encodeTxt){
                 try{
                     let data={};
-                    if(/"ts" ?:/.test(this.encodeTxt)){
-                        data = JSON.parse(this.encodeTxt)
+                    if(/\{[^{]*("ts" ?:)[^}]*\}/.test(this.encodeTxt)){
+                        data = JSON.parse(/\{[^{]*("ts" ?:)[^}]*\}/.exec(this.encodeTxt)[0])
                     }else if(/ts=/.test(this.encodeTxt)){
                         data = FN.query(this.encodeTxt)
                     }else {
